@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+
+    <id>Hona.VerticalSliceArchitecture.Template</id>
+    <version>2.0.0-alpha1</version>
+    <title>Vertical Slice Architecture Template</title>
+    <authors>Luke Parker (Hona)</authors>
+    <description>Spend less time over-engineering, and more time coding. The template has a focus on convenience, and developer confidence.</description>
+    <summary>
+      Spend less time over-engineering, and more time coding. The template has a focus on convenience, and developer confidence.
+    </summary>
+    <releaseNotes>
+      Early preview of my v2 VSA template.
+    </releaseNotes>
+    <readme>README.md</readme>
+    <projectUrl>https://github.com/Hona/VerticalSliceArchitecture</projectUrl>
+    <repository type="git" url="https://github.com/Hona/VerticalSliceArchitecture" branch="main" />
+    <license type="expression">MIT</license>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <tags>vertical-slice-architecture project template csharp dotnet</tags>
+    <icon>icon.png</icon>
+    <packageTypes>
+      <packageType name="Template" />
+    </packageTypes>
+  </metadata>
+
+  <files>
+    <file src=".template.config\icon.png" target="" />
+    <file src="README.md" />
+    <file src=".\**" target="content" exclude="**\bin\**;**\obj\**;**\.vs\**;**\.vscode\**;**\.git\**;**\.github\**;**\LICENSE;**\*.nupkg" />
+  </files>
+
+</package>
