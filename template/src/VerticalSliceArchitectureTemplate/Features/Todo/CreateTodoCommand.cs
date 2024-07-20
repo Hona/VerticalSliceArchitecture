@@ -1,18 +1,20 @@
-﻿using VerticalSliceArchitectureTemplate.Common;
+﻿namespace VerticalSliceArchitectureTemplate.Features.Games;
 
-namespace VerticalSliceArchitectureTemplate.Features.Todos;
-
-public sealed class CreateTodoCommand(HttpClient client)
+internal sealed class CreateTodoCommand(HttpClient client)
     : IEndpoint,
         IRequestHandler<CreateTodoCommand.Request, CreateTodoCommand.Response>
 {
-    public sealed record Request(string Input) : IRequest<Response>;
+    internal sealed record Request(string Input) : IRequest<Response>;
 
-    public sealed record Response(string Output);
+    internal sealed record Response(string Output);
 
     public static void Map(IEndpointRouteBuilder endpoints)
     {
-        endpoints.MapCommandPost<Request, Response>("/todos").WithTags("Todos").AllowAnonymous();
+        endpoints
+            .MapCommandPost<Request, Response>("/todos")
+            .WithTags("Todos")
+            .WithDescription("Create a new todo, somehow.")
+            .AllowAnonymous();
     }
 
     public async ValueTask<Response> Handle(Request request, CancellationToken cancellationToken)

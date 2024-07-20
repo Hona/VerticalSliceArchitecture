@@ -1,14 +1,12 @@
-﻿using VerticalSliceArchitectureTemplate.Common;
+﻿namespace VerticalSliceArchitectureTemplate.Features.Games;
 
-namespace VerticalSliceArchitectureTemplate.Features.Todos;
-
-public sealed class DeleteTodoCommand(HttpClient client)
+internal sealed class DeleteTodoCommand(HttpClient client)
     : IEndpoint,
         IRequestHandler<DeleteTodoCommand.Request, DeleteTodoCommand.Response>
 {
-    public sealed record Request(string Input) : IRequest<Response>;
+    internal sealed record Request(string Input) : IRequest<Response>;
 
-    public sealed record Response(string Output);
+    internal sealed record Response(string Output);
 
     public static void Map(IEndpointRouteBuilder endpoints)
     {
