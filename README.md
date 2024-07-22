@@ -24,6 +24,8 @@ As mentioned everything is WIP, here's a very quick list of the features:
 - Common:
     - EF Core, with fluent configuration
     - This sample shows simple config to map a rich entity to EF Core without needing a data model (choose how you'd do this for your project)
+- Architecture Tests
+    - Pre configured VSA architecture tests, using NuGet (Hona.ArchitectureTests). The template has configured which parts of the codebase relate to which VSA concepts. 🚀
 - TODO:
     - Add Mediator pipelines for cross cutting concerns on use cases, like logging, auth, validation (FluentValidation) etc 
     - Unit Test domain
