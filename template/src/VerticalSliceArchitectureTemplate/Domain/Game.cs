@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.Collections.Frozen;
+using System.Collections.ObjectModel;
+using Microsoft.AspNetCore.Identity;
 
 namespace VerticalSliceArchitectureTemplate.Domain;
 
@@ -10,16 +12,12 @@ public class Game
     public GameId Id { get; init; } = GameId.From(Guid.NewGuid());
     public GameState State { get; private set; } = GameState.XTurn;
 
-    public IReadOnlyList<IReadOnlyList<Tile>> Board => _board.AsReadOnly();
-    private Tile[][] _board = null!;
+    public Board Board { get; private set; } = null!;
 
     private const int BoardSize = 3;
 
     // EF Core
-    private Game(Tile[][] board)
-    {
-        _board = board;
-    }
+    private Game() { }
 
     public Game(GameId id)
     {
@@ -42,7 +40,7 @@ public class Game
         {
             throw new ArgumentException("Invalid position");
         }
-        if (_board[row][column] != Tile.Empty)
+        if (Board.Value[row][column] != Tile.Empty)
         {
             throw new ArgumentException("Position is already taken");
         }
@@ -54,7 +52,7 @@ public class Game
             _ => throw new ArgumentException("Invalid turn")
         };
 
-        _board[row][column] = tile;
+        Board.Value[row][column] = tile;
 
         if (IsGameOver(out var winner))
         {
@@ -75,58 +73,58 @@ public class Game
         for (var i = 0; i < BoardSize; i++)
         {
             if (
-                _board[i][0] != Tile.Empty
-                && _board[i][0] == _board[i][1]
-                && _board[i][0] == _board[i][2]
+                Board.Value[i][0] != Tile.Empty
+                && Board.Value[i][0] == Board.Value[i][1]
+                && Board.Value[i][0] == Board.Value[i][2]
             )
             {
-                winner = _board[i][0];
+                winner = Board.Value[i][0];
                 return true;
             }
             if (
-                _board[0][i] != Tile.Empty
-                && _board[0][i] == _board[1][i]
-                && _board[0][i] == _board[2][i]
+                Board.Value[0][i] != Tile.Empty
+                && Board.Value[0][i] == Board.Value[1][i]
+                && Board.Value[0][i] == Board.Value[2][i]
             )
             {
-                winner = _board[0][i];
+                winner = Board.Value[0][i];
                 return true;
             }
         }
 
         if (
-            _board[0][0] != Tile.Empty
-            && _board[0][0] == _board[1][1]
-            && _board[0][0] == _board[2][2]
+            Board.Value[0][0] != Tile.Empty
+            && Board.Value[0][0] == Board.Value[1][1]
+            && Board.Value[0][0] == Board.Value[2][2]
         )
         {
-            winner = _board[0][0];
+            winner = Board.Value[0][0];
             return true;
         }
 
         if (
-            _board[0][2] != Tile.Empty
-            && _board[0][2] == _board[1][1]
-            && _board[0][2] == _board[2][0]
+            Board.Value[0][2] != Tile.Empty
+            && Board.Value[0][2] == Board.Value[1][1]
+            && Board.Value[0][2] == Board.Value[2][0]
         )
         {
-            winner = _board[0][2];
+            winner = Board.Value[0][2];
             return true;
         }
 
-        return _board.SelectMany(row => row).All(tile => tile != Tile.Empty);
+        return Board.Value.SelectMany(row => row).All(tile => tile != Tile.Empty);
     }
 
     private void Reset()
     {
-        _board = new Tile[BoardSize][];
+        Board = new Board { Value = new Tile[BoardSize][] };
 
         for (var i = 0; i < BoardSize; i++)
         {
-            _board[i] = new Tile[BoardSize];
+            Board.Value[i] = new Tile[BoardSize];
             for (var j = 0; j < BoardSize; j++)
             {
-                _board[i][j] = Tile.Empty;
+                Board.Value[i][j] = Tile.Empty;
             }
         }
         State = GameState.XTurn;

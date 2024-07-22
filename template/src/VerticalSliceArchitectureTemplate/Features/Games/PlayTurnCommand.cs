@@ -1,4 +1,5 @@
-﻿using VerticalSliceArchitectureTemplate.Common.EfCore;
+﻿using Mapster;
+using VerticalSliceArchitectureTemplate.Common.EfCore;
 using VerticalSliceArchitectureTemplate.Domain;
 using VerticalSliceArchitectureTemplate.Features.Games.Common;
 
@@ -34,7 +35,7 @@ internal sealed class PlayTurnCommand(AppDbContext db)
         game.MakeMove(request.Row, request.Column, request.Player);
         await db.SaveChangesAsync(cancellationToken);
 
-        var output = new GameViewModel(game);
+        var output = game.Adapt<GameViewModel>();
         return new Response(output);
     }
 }

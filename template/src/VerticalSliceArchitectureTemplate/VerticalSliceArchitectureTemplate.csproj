@@ -38,4 +38,8 @@
         <PackageReference Include="Vogen" Version="4.0.12" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Common\EfCore\Migrations\" />
+    </ItemGroup>
+
 </Project>

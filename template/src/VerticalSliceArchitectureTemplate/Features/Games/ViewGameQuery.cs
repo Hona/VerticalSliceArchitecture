@@ -1,4 +1,5 @@
-﻿using VerticalSliceArchitectureTemplate.Common.EfCore;
+﻿using Mapster;
+using VerticalSliceArchitectureTemplate.Common.EfCore;
 using VerticalSliceArchitectureTemplate.Domain;
 using VerticalSliceArchitectureTemplate.Features.Games.Common;
 
@@ -30,7 +31,7 @@ internal sealed class ViewGameQuery(AppDbContext db)
             return new Response(null);
         }
 
-        var output = new GameViewModel(game);
+        var output = game.Adapt<GameViewModel>();
         return new Response(output);
     }
 }

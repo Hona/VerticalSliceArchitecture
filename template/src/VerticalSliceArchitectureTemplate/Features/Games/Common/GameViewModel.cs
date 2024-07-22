@@ -1,26 +1,29 @@
-﻿using VerticalSliceArchitectureTemplate.Domain;
+﻿using Mapster;
+using VerticalSliceArchitectureTemplate.Domain;
 
 namespace VerticalSliceArchitectureTemplate.Features.Games.Common;
 
-public class GameViewModel
+[AdaptFrom(typeof(Game))]
+public class GameViewModel : IRegister
 {
-    public char[][] Board { get; set; }
+    public char[][]? Board { get; set; }
 
-    public GameViewModel(Game game)
+    public void Register(TypeAdapterConfig config)
     {
-        Board = game
-            .Board.Select(row =>
-                row.Select(tile =>
-                        tile switch
-                        {
-                            Tile.Empty => ' ',
-                            Tile.X => 'X',
-                            Tile.O => 'O',
-                            _ => throw new ArgumentOutOfRangeException(nameof(tile))
-                        }
-                    )
-                    .ToArray()
-            )
-            .ToArray();
+        config
+            .NewConfig<Game, GameViewModel>()
+            .Map(
+                dest => dest.Board,
+                src => src.Board.Value.Select(row => row.Select(GetTileChar).ToArray()).ToArray()
+            );
     }
+
+    private static char GetTileChar(Tile tile) =>
+        tile switch
+        {
+            Tile.Empty => ' ',
+            Tile.X => 'X',
+            Tile.O => 'O',
+            _ => '?'
+        };
 }

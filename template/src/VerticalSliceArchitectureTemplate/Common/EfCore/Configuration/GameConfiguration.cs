@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using VerticalSliceArchitectureTemplate.Domain;
 
@@ -9,11 +9,22 @@ public class GameConfiguration : IEntityTypeConfiguration<Game>
 {
     public void Configure(EntityTypeBuilder<Game> builder)
     {
-        builder.HasKey(x => x.Id);
-        builder.OwnsOne(x => x.Board, x => x.ToJson());
-        builder
-            .Property(x => x.Board)
-            .HasField("_board")
-            .Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
+        builder.HasKey(game => game.Id);
+
+        builder.OwnsOne<Board>(
+            game => game.Board,
+            game =>
+            {
+                game.ToJson();
+                game.Property(board => board.Value)
+                    .HasConversion(
+                        v => JsonSerializer.Serialize(v, JsonSerializerOptions.Default),
+                        v =>
+                            JsonSerializer.Deserialize<Tile[][]>(v, JsonSerializerOptions.Default)
+                            ?? Array.Empty<Tile[]>(),
+                        new TileArrayComparer()
+                    );
+            }
+        );
     }
 }
