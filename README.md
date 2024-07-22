@@ -33,3 +33,7 @@ As mentioned everything is WIP, here's a very quick list of the features:
     - Add Mediator pipelines for cross cutting concerns on use cases, like logging, auth, validation (FluentValidation) etc 
     - Unit Test domain
     - Test Containers, etc for integration testing the use cases
+
+To demostrate the template, here is a current whole vertical slice/use case!
+
+https://github.com/Hona/VerticalSliceArchitecture/blob/0e4a92d4643ff845a8576fe2d9390b5dcae87843/template/src/VerticalSliceArchitectureTemplate/Features/Games/PlayTurnCommand.cs#L8-L41
