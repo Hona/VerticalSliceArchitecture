@@ -3,8 +3,11 @@ Spend less time over-engineering, and more time coding. The template has a focus
 
 > [!IMPORTANT]
 > This template is undergoing a rebuild, ready for version 2! 🥳
+>
 > Please wait patiently as this reaches the stable version, there's many important things to finish.
+>
 > **Please ⭐ the repository to show your support!**
+>
 > If you would like updates, feel free to 'Watch' the repo, that way you'll see the release in your GitHub home feed.
 
 As mentioned everything is WIP, here's a very quick list of the features:
