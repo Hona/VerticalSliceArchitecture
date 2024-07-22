@@ -2,7 +2,7 @@
 Spend less time over-engineering, and more time coding. The template has a focus on convenience, and developer confidence.
 
 > [!IMPORTANT]
-> This template is undergoing a rebuild, ready for version 2! 🥳
+> This template is undergoing a rebuild, ready for version 2! 🥳 See my experimental version 1 template [here](https://github.com/SSWConsulting/SSW.VerticalSliceArchitecture)
 >
 > Please wait patiently as this reaches the stable version, there's many important things to finish.
 >
