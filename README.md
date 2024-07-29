@@ -271,3 +271,9 @@ If you read it this far, why not give it a star? ;)
 <p align="center">
     <img src="docs/divider-tertiary.png" />
 </p>
+
+
+<p align="center">
+<img src="https://repobeats.axiom.co/api/embed/5491ee3c19266af4f681dcf016c299dfc2973b5f.svg" alt="Repobeats analytics image" />
+</p>
+
