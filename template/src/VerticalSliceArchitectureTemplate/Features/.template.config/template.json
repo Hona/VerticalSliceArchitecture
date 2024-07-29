@@ -17,7 +17,7 @@
     "language": "C#",
     "type": "item"
   },
-  "sourceName": "Todo",
+  "sourceName": "Game",
   "preferNameDirectory": false,
   "symbols": {
     "DefaultNamespace": {
@@ -30,13 +30,13 @@
       "type": "parameter",
       "datatype": "string",
       "isRequired": false,
-      "replaces": "Todos",
-      "fileRename": "Todos"
+      "replaces": "Games",
+      "fileRename": "Games"
     },
     "featureNamePluralDefault": {
       "type": "computed",
       "value": "featureNamePlural && featureNamePlural !== '' ? featureNamePlural : featureName + 's'",
-      "replaces": "Todos"
+      "replaces": "Games"
     },
     "tempFirstPluralCamel": {
       "type": "derived",
@@ -51,8 +51,8 @@
     "featureNamePluralCamel": {
       "type": "generated",
       "generator": "join",
-      "replaces": "todos",
-      "fileRename": "todos",
+      "replaces": "games",
+      "fileRename": "games",
       "parameters": {
         "symbols": [
           {
@@ -70,8 +70,8 @@
       "type": "parameter",
       "datatype": "string",
       "isRequired": true,
-      "replaces": "Todo",
-      "fileRename": "Todo"
+      "replaces": "Game",
+      "fileRename": "Game"
     },
     "tempFirstCamel": {
       "type": "derived",
@@ -86,8 +86,8 @@
     "featureNameCamel": {
       "type": "generated",
       "generator": "join",
-      "replaces": "todo",
-      "fileRename": "todo",
+      "replaces": "game",
+      "fileRename": "game",
       "parameters": {
         "symbols": [
           {
