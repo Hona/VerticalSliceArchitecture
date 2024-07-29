@@ -21,6 +21,46 @@ Want to see what a vertical slice looks like? [Jump to the code snippet!](#full-
     <img src="docs/divider-primary.png" />
 </p>
 
+<h3 align="center"><strong>Getting started ⚡</strong></h3>
+
+<p align="center">
+    <img src="docs/divider-primary.png" />
+</p>
+
+#### dotnet CLI
+
+To install the template from NuGet.org run the following command:
+
+```bash
+dotnet new install Hona.VerticalSliceArchitecture.Template
+```
+
+Then create a new solution:
+
+```bash
+mkdir Sprout
+cd Sprout
+
+dotnet new hona-vsa
+```
+
+Finally, to update the template to the latest version run:
+
+```bash
+dotnet new update
+```
+
+#### GUI
+
+```bash
+dotnet new install Hona.VerticalSliceArchitecture.Template
+```
+
+then create:
+
+<img src="https://github.com/user-attachments/assets/797575c2-1304-4501-b9d2-6b6863ace0f3" width="500" />
+
+
 <h3 align="center"><strong>Features ✨</strong></h3>
 
 <p align="center">
