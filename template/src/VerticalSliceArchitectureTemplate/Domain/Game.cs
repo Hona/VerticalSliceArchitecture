@@ -39,22 +39,22 @@ public class Game
 
         if (tile != Tile.X && tile != Tile.O)
         {
-            throw new ArgumentException("Invalid tile");
+            throw new InvalidOperationException("Invalid tile");
         }
         if (row < 0 || row >= BoardSize || column < 0 || column >= BoardSize)
         {
-            throw new ArgumentException("Invalid position");
+            throw new InvalidOperationException("Invalid position");
         }
         if (Board.Value[row][column] != Tile.Empty)
         {
-            throw new ArgumentException("Position is already taken");
+            throw new InvalidOperationException("Position is already taken");
         }
 
         State = State switch
         {
             GameState.XTurn when tile == Tile.X => GameState.OTurn,
             GameState.OTurn when tile == Tile.O => GameState.XTurn,
-            _ => throw new ArgumentException("Invalid turn")
+            _ => throw new InvalidOperationException("Game is already over")
         };
 
         Board.Value[row][column] = tile;
