@@ -1,6 +1,4 @@
-﻿using System.Collections.Frozen;
-using System.Collections.ObjectModel;
-using Microsoft.AspNetCore.Identity;
+﻿using Ardalis.GuardClauses;
 
 namespace VerticalSliceArchitectureTemplate.Domain;
 
@@ -10,6 +8,9 @@ public readonly partial record struct GameId;
 public class Game
 {
     public GameId Id { get; init; } = GameId.From(Guid.NewGuid());
+
+    public const int MaxNameLength = 50;
+    public string Name { get; set; }
     public GameState State { get; private set; } = GameState.XTurn;
 
     public Board Board { get; private set; } = null!;
@@ -19,9 +20,13 @@ public class Game
     // EF Core
     private Game() { }
 
-    public Game(GameId id)
+    public Game(GameId id, string name)
     {
+        Guard.Against.StringTooLong(name, MaxNameLength);
+
         Id = id;
+        Name = name;
+
         Reset();
     }
 

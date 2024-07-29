@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using VerticalSliceArchitectureTemplate.Domain;
 
 namespace VerticalSliceArchitectureTemplate.Common.EfCore;
 

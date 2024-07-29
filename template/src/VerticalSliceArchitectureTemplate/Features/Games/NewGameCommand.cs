@@ -1,30 +1,33 @@
-﻿using VerticalSliceArchitectureTemplate.Common.EfCore;
-using VerticalSliceArchitectureTemplate.Domain;
+﻿namespace VerticalSliceArchitectureTemplate.Features.Games;
 
-namespace VerticalSliceArchitectureTemplate.Features.Games;
+internal sealed record NewGameRequest(string Name);
+
+internal sealed class NewGameRequestValidator : AbstractValidator<NewGameRequest>
+{
+    public NewGameRequestValidator()
+    {
+        RuleFor(x => x.Name).NotEmpty().MaximumLength(Game.MaxNameLength);
+    }
+}
 
 internal sealed class NewGameCommand(AppDbContext db)
-    : IEndpoint,
-        IRequestHandler<NewGameCommand.Request, NewGameCommand.Response>
+    : Endpoint<NewGameRequest, Results<Created, BadRequest>>
 {
-    internal sealed record Request : IRequest<Response>;
-
-    internal sealed record Response(GameId GameId);
-
-    public static void Map(IEndpointRouteBuilder endpoints)
+    public override void Configure()
     {
-        endpoints
-            .MapCommandPost<Request, Response>("/games")
-            .WithTags("Games")
-            .WithDescription("Creates a new game")
-            .AllowAnonymous();
+        Post("/games");
+        AllowAnonymous();
     }
 
-    public async ValueTask<Response> Handle(Request request, CancellationToken cancellationToken)
+    public override async Task HandleAsync(
+        NewGameRequest request,
+        CancellationToken cancellationToken
+    )
     {
-        var game = new Game(GameId.From(Guid.NewGuid()));
+        var game = new Game(GameId.From(Guid.NewGuid()), request.Name);
         db.Add(game);
         await db.SaveChangesAsync(cancellationToken);
-        return new Response(game.Id);
+
+        await SendResultAsync(TypedResults.Created("/games/{gameId}", game.Id));
     }
 }

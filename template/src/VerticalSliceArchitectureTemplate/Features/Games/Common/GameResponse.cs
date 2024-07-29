@@ -1,17 +1,16 @@
 ﻿using Mapster;
-using VerticalSliceArchitectureTemplate.Domain;
 
 namespace VerticalSliceArchitectureTemplate.Features.Games.Common;
 
 [AdaptFrom(typeof(Game))]
-public class GameViewModel : IRegister
+public class GameResponse : IRegister
 {
     public char[][]? Board { get; set; }
 
     public void Register(TypeAdapterConfig config)
     {
         config
-            .NewConfig<Game, GameViewModel>()
+            .NewConfig<Game, GameResponse>()
             .Map(
                 dest => dest.Board,
                 src => src.Board.Value.Select(row => row.Select(GetTileChar).ToArray()).ToArray()
