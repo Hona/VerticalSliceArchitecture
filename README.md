@@ -1,7 +1,12 @@
 [![](docs/banner-tall.png)](https://github.com/Hona/VerticalSliceArchitecture)
 
-# Vertical Slice Architecture
 Spend less time over-engineering, and more time coding. The template has a focus on convenience, and developer confidence.
+
+Want to see what a vertical slice looks like? [Jump to the code snippet!](#full-code-snippet)
+
+<p align="center">
+    <img src="docs/divider-primary.png" />
+</p>
 
 > [!IMPORTANT]
 > This template is undergoing a rebuild, ready for version 2! 🥳 See my experimental version 1 template [here](https://github.com/SSWConsulting/SSW.VerticalSliceArchitecture)
@@ -12,13 +17,41 @@ Spend less time over-engineering, and more time coding. The template has a focus
 >
 > If you would like updates, feel free to 'Watch' the repo, that way you'll see the release in your GitHub home feed.
 
-As mentioned everything is WIP, here's a very quick list of the features:
+<p align="center">
+    <img src="docs/divider-primary.png" />
+</p>
 
-- A compelling example with the TikTacToe game! 🎮
-- Rich Domain:
-    - with Vogen for Value-Objects
-    - with FluentResults for errors as values instead of exceptions
-    - For the Domain, start with an anemic Domain, then as use cases reuse logic, refactor into this more explicit Domain
+<h3 align="center"><strong>Features ✨</strong></h3>
+
+<p align="center">
+    <img src="docs/divider-secondary.png" />
+</p>
+
+### A compelling example with the TikTacToe game! 🎮
+
+```cs
+var game = new Game(...);
+game.MakeMove(0, 0, Tile.X);
+game.MakeMove(0, 1, Tile.Y);
+```
+
+### Rich Domain (thank you DDD!)
+
+- with Vogen for Value-Objects
+- with FluentResults for errors as values instead of exceptions
+- For the Domain, start with an anemic Domain, then as use cases reuse logic, refactor into this more explicit Domain
+
+```cs
+[ValueObject<Guid>]
+public readonly partial record struct GameId;
+
+public class Game
+{
+    public GameId Id { get; init; } = GameId.From(Guid.NewGuid());
+
+    ...
+```
+    
 - Feature Slices:
     - Use cases follow CQRS using Mediator (source gen alternative of MediatR)
     - REPR pattern for the use cases
@@ -35,6 +68,8 @@ As mentioned everything is WIP, here's a very quick list of the features:
     - Add Mediator pipelines for cross cutting concerns on use cases, like logging, auth, validation (FluentValidation) etc 
     - Unit Test domain
     - Test Containers, etc for integration testing the use cases
+
+## Full Code Snippet
 
 To demostrate the template, here is a current whole vertical slice/use case!
 
