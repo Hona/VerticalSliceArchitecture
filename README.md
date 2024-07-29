@@ -1,5 +1,12 @@
-# VerticalSliceArchitecture
+[![](docs/banner-tall.png)](https://github.com/Hona/VerticalSliceArchitecture)
+
 Spend less time over-engineering, and more time coding. The template has a focus on convenience, and developer confidence.
+
+Want to see what a vertical slice looks like? [Jump to the code snippet!](#full-code-snippet)
+
+<p align="center">
+    <img src="docs/divider-primary.png" />
+</p>
 
 > [!IMPORTANT]
 > This template is undergoing a rebuild, ready for version 2! 🥳 See my experimental version 1 template [here](https://github.com/SSWConsulting/SSW.VerticalSliceArchitecture)
@@ -10,29 +17,208 @@ Spend less time over-engineering, and more time coding. The template has a focus
 >
 > If you would like updates, feel free to 'Watch' the repo, that way you'll see the release in your GitHub home feed.
 
-As mentioned everything is WIP, here's a very quick list of the features:
+<p align="center">
+    <img src="docs/divider-primary.png" />
+</p>
 
-- A compelling example with the TikTacToe game! 🎮
-- Rich Domain:
-    - with Vogen for Value-Objects
-    - with FluentResults for errors as values instead of exceptions
-    - For the Domain, start with an anemic Domain, then as use cases reuse logic, refactor into this more explicit Domain
-- Feature Slices:
-    - Use cases follow CQRS using Mediator (source gen alternative of MediatR)
-    - REPR pattern for the use cases
-    - 1 File per use case, containing the endpoint mapping, request, response, handler & application logic
-        - Endpoint is source generated
-    - For use cases, start with 'just get it working' style code, then refactor into the Domain/Common code.
-    - Mapster for source gen/explicit mapping, for example from Domain -> Response/ViewModels
+<h3 align="center"><strong>Features ✨</strong></h3>
+
+<p align="center">
+    <img src="docs/divider-primary.png" />
+</p>
+
+### A compelling example with the TikTacToe game! 🎮
+
+```cs
+var game = new Game(...);
+game.MakeMove(0, 0, Tile.X);
+game.MakeMove(0, 1, Tile.Y);
+```
+
+<p align="center">
+    <img src="docs/divider-secondary.png" />
+</p>
+
+### Rich Domain (thank you DDD!)
+
+- with Vogen for Value-Objects
+- with FluentResults for errors as values instead of exceptions
+- For the Domain, start with an anemic Domain, then as use cases reuse logic, refactor into this more explicit Domain
+
+```cs
+[ValueObject<Guid>]
+public readonly partial record struct GameId;
+
+public class Game
+{
+    public GameId Id { get; init; } = GameId.From(Guid.NewGuid());
+
+    ...
+```
+
+<p align="center">
+    <img src="docs/divider-secondary.png" />
+</p>
+
+### Quick to write feature slices
+
+- Use cases follow CQRS using Mediator (source gen alternative of MediatR)
+- REPR pattern for the use cases
+- 1 File per use case, containing the endpoint mapping, request, response, handler & application logic
+    - Endpoint is source generated
+- For use cases, start with 'just get it working' style code, then refactor into the Domain/Common code.
+- Mapster for source gen/explicit mapping, for example from Domain -> Response/ViewModels
+
+`Features/MyThings/MyQuery.cs`
+
+```cs
+internal sealed record MyRequest(string Text);
+internal sealed record MyResponse(int Result);
+
+internal sealed class MyQuery(AppDbContext db)
+    : Endpoint<MyRequest, Results<Ok<GameResponse>, BadRequest>>
+{
+    public override void Configure()
+    {
+        Get("/my/{Text}");
+    }
+
+    public override async Task HandleAsync(
+        MyRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        var thing = await db.Things.SingleAsync(x => x.Text == Text, cancellationToken);
+
+        if (thing is null)
+        {
+            await SendResultAsync(TypedResults.BadRequest());
+            return;
+        }
+
+        var output = new MyResponse(thing.Value);
+        await SendResultAsync(TypedResults.Ok(output));
+    }
+}
+```
+
+<p align="center">
+    <img src="docs/divider-secondary.png" />
+</p>
+
+### EF Core
+
 - Common:
     - EF Core, with fluent configuration
     - This sample shows simple config to map a rich entity to EF Core without needing a data model (choose how you'd do this for your project)
-- Architecture Tests
-    - Pre configured VSA architecture tests, using NuGet (Hona.ArchitectureTests). The template has configured which parts of the codebase relate to which VSA concepts. 🚀
+
+`Common/EfCore/AppDbContext.cs`
+
+```cs
+public class AppDbContext : DbContext
+{
+    public DbSet<MyEntity> MyEntities { get; set; } = default!;
+
+    ...
+}
+```
+
+`Common/EfCore/Configuration/MyEntityConfiguration.cs`
+
+```cs
+public class MyEntityConfiguration : IEntityTypeConfiguration<MyEntity>
+{
+    public void Configure(EntityTypeBuilder<MyEntity> builder)
+    {
+        builder.HasKey(x => x.Id);
+
+        ...
+    }
+}
+```
+
+<p align="center">
+    <img src="docs/divider-secondary.png" />
+</p>
+
+### Architecture Tests via NuGet package
+
+- Pre configured VSA architecture tests, using NuGet (Hona.ArchitectureTests). The template has configured which parts of the codebase relate to which VSA concepts. 🚀
+
+```cs
+public class VerticalSliceArchitectureTests
+{
+    [Fact]
+    public void VerticalSliceArchitecture()
+    {
+        Ensure.VerticalSliceArchitecture(x =>
+        {
+            x.Domain = new NamespacePart(SampleAppAssembly, ".Domain");
+            ...
+        }).Assert();
+    }
+}
+```
+
+<p align="center">
+    <img src="docs/divider-secondary.png" />
+</p>
+
+### Cross Cutting Concerns
+
 - TODO:
-    - Add Mediator pipelines for cross cutting concerns on use cases, like logging, auth, validation (FluentValidation) etc 
-    - Unit Test domain
-    - Test Containers, etc for integration testing the use cases
+    - Add ~~Mediator~~ FastEndpoints pipelines for cross cutting concerns on use cases, like logging, auth, validation (FluentValidation) etc (i.e. Common scoped to Use Cases)
+
+
+## Automated Testing
+
+<p align="center">
+    <img src="docs/divider-tertiary.png" />
+</p>
+
+### Domain - Unit Tested
+
+Easy unit tests for the Domain layer
+
+```cs
+[Fact]
+public void Game_MakeMove_BindsTile()
+{
+    // Arrange
+    var game = new Game(GameId.From(Guid.NewGuid()), "Some Game");
+    var tile = Tile.X;
+    
+    // Act
+    game.MakeMove(0, 0, tile);
+    
+    // Assert
+    game.Board.Value[0][0].Should().Be(tile);
+}
+```
+
+<p align="center">
+    <img src="docs/divider-secondary.png" />
+</p>
+
+### Application - Integration Tested
+
+Easy integration tests for each Use Case or Command/Query
+
+TODO: Test Containers, etc for integration testing the use cases. How does this tie into FastEndpoints now... :D
+
+```cs
+TODO
+```
+
+<p align="center">
+    <img src="docs/divider-secondary.png" />
+</p>
+
+### Code - Architecture Tested
+
+The code is already architecture tested for VSA, but this is extensible, using [Hona.ArchitectureTests](https://github.com/Hona/ArchitectureTests)
+
+## Full Code Snippet
 
 To demostrate the template, here is a current whole vertical slice/use case!
 
@@ -79,3 +265,5 @@ internal sealed class PlayTurnCommand(AppDbContext db)
     }
 }
 ```
+
+If you read it this far, why not give it a star? ;) 
