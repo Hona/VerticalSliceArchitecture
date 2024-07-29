@@ -1,4 +1,13 @@
 [![](docs/banner-tall.png)](https://github.com/Hona/VerticalSliceArchitecture)
+[![](https://img.shields.io/github/actions/workflow/status/Hona/VerticalSliceArchitecture/dotnet.yml?branch=main)](https://github.com/Hona/VerticalSliceArchitecture/actions?query=branch%3Amain)
+[![](https://img.shields.io/github/release/Hona/VerticalSliceArchitecture.svg?label=latest%20release&color=007edf)](https://github.com/Hona/VerticalSliceArchitecture/releases/latest)
+[![](https://img.shields.io/nuget/dt/Hona.VerticalSliceArchitecture.Template.svg?label=downloads&color=007edf&logo=nuget)](https://www.nuget.org/packages/Hona.VerticalSliceArchitecture.Template)
+[![](https://img.shields.io/librariesio/dependents/nuget/Hona.VerticalSliceArchitecture.Template.svg?label=dependent%20libraries)](https://libraries.io/nuget/Hona.VerticalSliceArchitecture.Template)
+[![GitHub Repo stars](https://img.shields.io/github/stars/Hona/VerticalSliceArchitecture)](https://github.com/Hona/VerticalSliceArchitecture/stargazers)
+[![GitHub contributors](https://img.shields.io/github/contributors/Hona/VerticalSliceArchitecture)](https://github.com/Hona/VerticalSliceArchitecture/graphs/contributors)
+[![GitHub last commit](https://img.shields.io/github/last-commit/Hona/VerticalSliceArchitecture)](https://github.com/Hona/VerticalSliceArchitecture)
+[![GitHub commit activity](https://img.shields.io/github/commit-activity/m/Hona/VerticalSliceArchitecture)](https://github.com/Hona/VerticalSliceArchitecture/graphs/commit-activity)
+[![open issues](https://img.shields.io/github/issues/Hona/VerticalSliceArchitecture)](https://github.com/Hona/VerticalSliceArchitecture/issues)
 
 Spend less time over-engineering, and more time coding. The template has a focus on convenience, and developer confidence.
 
