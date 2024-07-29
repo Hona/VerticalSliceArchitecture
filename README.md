@@ -36,4 +36,46 @@ As mentioned everything is WIP, here's a very quick list of the features:
 
 To demostrate the template, here is a current whole vertical slice/use case!
 
-https://github.com/Hona/VerticalSliceArchitecture/blob/0e4a92d4643ff845a8576fe2d9390b5dcae87843/template/src/VerticalSliceArchitectureTemplate/Features/Games/PlayTurnCommand.cs#L8-L41
+```cs
+// 👇🏻 Vogen for Strong IDs + 👇🏻 'GameId' field is hydrated from the route parameter
+internal sealed record PlayTurnRequest(GameId GameId, int Row, int Column, Tile Player);
+
+// 👇🏻 TypedResults for write once output as well as Swagger documentation
+internal sealed class PlayTurnCommand(AppDbContext db)
+    : Endpoint<PlayTurnRequest, Results<Ok<GameResponse>, NotFound>>
+{
+    // 👇🏻 FastEndpoints for a super easy Web API
+    public override void Configure()
+    {
+        Post("/games/{GameId}/play-turn");
+        Summary(x =>
+        {
+            x.Description = "Make a move in the game";
+        });
+        AllowAnonymous();
+    }
+
+    public override async Task HandleAsync(
+        PlayTurnRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        // 👇🏻 EF Core without crazy abstractions over the abstraction
+        var game = await db.FindAsync<Game>(request.GameId);
+
+        if (game is null)
+        {
+            await SendResultAsync(TypedResults.NotFound());
+            return;
+        }
+
+        // 👇🏻 Rich Domain for high value/shared logic
+        game.MakeMove(request.Row, request.Column, request.Player);
+        await db.SaveChangesAsync(cancellationToken);
+
+        // 👇🏻 Mapster to easily get a view model
+        var output = game.Adapt<GameResponse>();
+        await SendResultAsync(TypedResults.Ok(output));
+    }
+}
+```
