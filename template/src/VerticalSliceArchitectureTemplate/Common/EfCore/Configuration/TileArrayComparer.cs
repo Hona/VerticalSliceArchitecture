@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
-using VerticalSliceArchitectureTemplate.Domain;
 
 namespace VerticalSliceArchitectureTemplate.Common.EfCore.Configuration;
 

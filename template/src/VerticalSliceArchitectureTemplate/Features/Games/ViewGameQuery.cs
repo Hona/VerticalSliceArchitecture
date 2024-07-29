@@ -1,37 +1,38 @@
 ﻿using Mapster;
-using VerticalSliceArchitectureTemplate.Common.EfCore;
-using VerticalSliceArchitectureTemplate.Domain;
 using VerticalSliceArchitectureTemplate.Features.Games.Common;
 
 namespace VerticalSliceArchitectureTemplate.Features.Games;
 
+internal sealed record ViewGameRequest(GameId GameId);
+
 internal sealed class ViewGameQuery(AppDbContext db)
-    : IEndpoint,
-        IRequestHandler<ViewGameQuery.Request, ViewGameQuery.Response>
+    : Endpoint<ViewGameRequest, Results<Ok<GameResponse>, NotFound>>
 {
-    internal sealed record Request(GameId GameId) : IRequest<Response>;
-
-    internal sealed record Response(GameViewModel? Game);
-
-    public static void Map(IEndpointRouteBuilder endpoints)
+    public override void Configure()
     {
-        endpoints
-            .MapQuery<Request, Response>("/games")
-            .WithTags("Games")
-            .WithDescription("Views the board as its string representation")
-            .AllowAnonymous();
+        Get("/games/{GameId}");
+        Summary(x =>
+        {
+            x.Description = "Views the board as its string representation";
+        });
+        AllowAnonymous();
     }
 
-    public async ValueTask<Response> Handle(Request request, CancellationToken cancellationToken)
+    public override async Task HandleAsync(
+        ViewGameRequest request,
+        CancellationToken cancellationToken
+    )
     {
         var game = await db.FindAsync<Game>(request.GameId);
 
         if (game is null)
         {
-            return new Response(null);
+            await SendResultAsync(TypedResults.NotFound());
+            return;
         }
 
-        var output = game.Adapt<GameViewModel>();
-        return new Response(output);
+        var output = game.Adapt<GameResponse>();
+
+        await SendResultAsync(TypedResults.Ok(output));
     }
 }

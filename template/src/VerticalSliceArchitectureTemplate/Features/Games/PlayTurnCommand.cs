@@ -1,41 +1,40 @@
 ﻿using Mapster;
-using VerticalSliceArchitectureTemplate.Common.EfCore;
-using VerticalSliceArchitectureTemplate.Domain;
 using VerticalSliceArchitectureTemplate.Features.Games.Common;
 
 namespace VerticalSliceArchitectureTemplate.Features.Games;
 
+internal sealed record PlayTurnRequest(GameId GameId, int Row, int Column, Tile Player);
+
 internal sealed class PlayTurnCommand(AppDbContext db)
-    : IEndpoint,
-        IRequestHandler<PlayTurnCommand.Request, PlayTurnCommand.Response>
+    : Endpoint<PlayTurnRequest, Results<Ok<GameResponse>, NotFound>>
 {
-    internal sealed record Request(GameId GameId, int Row, int Column, Tile Player)
-        : IRequest<Response>;
-
-    internal sealed record Response(GameViewModel? Game);
-
-    public static void Map(IEndpointRouteBuilder endpoints)
+    public override void Configure()
     {
-        endpoints
-            .MapCommandPost<Request, Response>("/games/play") //{GameId}/
-            .WithTags("Games")
-            .WithDescription("Plays a turn")
-            .AllowAnonymous();
+        Post("/games/{GameId}/play-turn");
+        Summary(x =>
+        {
+            x.Description = "Make a move in the game";
+        });
+        AllowAnonymous();
     }
 
-    public async ValueTask<Response> Handle(Request request, CancellationToken cancellationToken)
+    public override async Task HandleAsync(
+        PlayTurnRequest request,
+        CancellationToken cancellationToken
+    )
     {
         var game = await db.FindAsync<Game>(request.GameId);
 
         if (game is null)
         {
-            return new Response(null);
+            await SendResultAsync(TypedResults.NotFound());
+            return;
         }
 
         game.MakeMove(request.Row, request.Column, request.Player);
         await db.SaveChangesAsync(cancellationToken);
 
-        var output = game.Adapt<GameViewModel>();
-        return new Response(output);
+        var output = game.Adapt<GameResponse>();
+        await SendResultAsync(TypedResults.Ok(output));
     }
 }
