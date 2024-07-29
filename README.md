@@ -267,3 +267,7 @@ internal sealed class PlayTurnCommand(AppDbContext db)
 ```
 
 If you read it this far, why not give it a star? ;) 
+
+<p align="center">
+    <img src="docs/divider-tertiary.png" />
+</p>
