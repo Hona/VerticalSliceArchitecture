@@ -1,5 +1,4 @@
-﻿using Mapster;
-using VerticalSliceArchitectureTemplate.Features.Games.Common;
+﻿using VerticalSliceArchitectureTemplate.Features.Games.Common;
 
 namespace VerticalSliceArchitectureTemplate.Features.Games;
 
@@ -31,7 +30,7 @@ internal sealed class ViewGameQuery(AppDbContext db)
             return;
         }
 
-        var output = game.Adapt<GameResponse>();
+        var output = GameResponse.MapFrom(game);
 
         await SendResultAsync(TypedResults.Ok(output));
     }

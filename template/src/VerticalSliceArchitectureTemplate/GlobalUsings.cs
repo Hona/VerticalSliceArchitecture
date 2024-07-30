@@ -5,3 +5,4 @@ global using Microsoft.AspNetCore.Http.HttpResults;
 global using VerticalSliceArchitectureTemplate.Common.EfCore;
 global using VerticalSliceArchitectureTemplate.Domain;
 global using Vogen;
+global using Riok.Mapperly.Abstractions;
