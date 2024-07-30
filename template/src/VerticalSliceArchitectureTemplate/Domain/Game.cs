@@ -82,49 +82,55 @@ public class Game
         // TODO: Check this GH Copilot logic
         winner = null;
 
+        var tiles = Board.Value;
+        Tile firstTile = tiles[0][0];
+
         for (var i = 0; i < BoardSize; i++)
         {
+            Tile firstInColumn = tiles[i][0];
             if (
-                Board.Value[i][0] != Tile.Empty
-                && Board.Value[i][0] == Board.Value[i][1]
-                && Board.Value[i][0] == Board.Value[i][2]
+                firstInColumn != Tile.Empty
+                && firstInColumn == tiles[i][1]
+                && firstInColumn == tiles[i][2]
             )
             {
-                winner = Board.Value[i][0];
+                winner = firstInColumn;
                 return true;
             }
+
+            Tile firstInRow = tiles[0][i];
             if (
-                Board.Value[0][i] != Tile.Empty
-                && Board.Value[0][i] == Board.Value[1][i]
-                && Board.Value[0][i] == Board.Value[2][i]
+                firstInRow != Tile.Empty
+                && firstInRow == tiles[1][i]
+                && firstInRow == tiles[2][i]
             )
             {
-                winner = Board.Value[0][i];
+                winner = firstInRow;
                 return true;
             }
         }
 
         if (
-            Board.Value[0][0] != Tile.Empty
-            && Board.Value[0][0] == Board.Value[1][1]
-            && Board.Value[0][0] == Board.Value[2][2]
+            firstTile != Tile.Empty
+            && firstTile == tiles[1][1]
+            && firstTile == tiles[2][2]
         )
         {
-            winner = Board.Value[0][0];
+            winner = firstTile;
             return true;
         }
 
         if (
-            Board.Value[0][2] != Tile.Empty
-            && Board.Value[0][2] == Board.Value[1][1]
-            && Board.Value[0][2] == Board.Value[2][0]
+            tiles[0][2] != Tile.Empty
+            && tiles[0][2] == tiles[1][1]
+            && tiles[0][2] == tiles[2][0]
         )
         {
-            winner = Board.Value[0][2];
+            winner = tiles[0][2];
             return true;
         }
 
-        return Board.Value.SelectMany(row => row).All(tile => tile != Tile.Empty);
+        return tiles.SelectMany(row => row).All(tile => tile != Tile.Empty);
     }
 
     private void Reset()
