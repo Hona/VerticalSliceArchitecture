@@ -1,5 +1,4 @@
-﻿using Mapster;
-using VerticalSliceArchitectureTemplate.Features.Games.Common;
+﻿using VerticalSliceArchitectureTemplate.Features.Games.Common;
 
 namespace VerticalSliceArchitectureTemplate.Features.Games;
 
@@ -34,7 +33,7 @@ internal sealed class PlayTurnCommand(AppDbContext db)
         game.MakeMove(request.BoardPosition, request.Player);
         await db.SaveChangesAsync(cancellationToken);
 
-        var output = game.Adapt<GameResponse>();
+        var output = game.ToResponse();
         await SendResultAsync(TypedResults.Ok(output));
     }
 }

@@ -12,7 +12,7 @@ updates:
     rebase-strategy: auto
 
   - package-ecosystem: "nuget"
-    directory: "/"
+    directory: "/template/"
     schedule:
       interval: daily
     rebase-strategy: auto

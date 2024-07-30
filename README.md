@@ -259,6 +259,8 @@ TODO: Test Containers, etc for integration testing the use cases. How does this 
 TODO
 ```
 
+TODO: Section on mapping & how important the usages + used by at compile time is! (AM vs Mapperly)
+
 <p align="center">
     <img src="https://github.com/Hona/VerticalSliceArchitecture/blob/main/docs/divider-secondary.png?raw=true" />
 </p>
@@ -308,8 +310,8 @@ internal sealed class PlayTurnCommand(AppDbContext db)
         game.MakeMove(request.Row, request.Column, request.Player);
         await db.SaveChangesAsync(cancellationToken);
 
-        // 👇🏻 Mapster to easily get a view model
-        var output = game.Adapt<GameResponse>();
+        // 👇🏻 Mapperly to easily get a view model with Usage chain at compile time
+        var output = GameResponse.MapFrom(game);
         await SendResultAsync(TypedResults.Ok(output));
     }
 }

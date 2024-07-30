@@ -1,4 +1,4 @@
-﻿using Mapster;
+﻿using Microsoft.EntityFrameworkCore;
 using VerticalSliceArchitectureTemplate.Features.Games.Common;
 
 namespace VerticalSliceArchitectureTemplate.Features.Games;
@@ -23,16 +23,18 @@ internal sealed class ViewGameQuery(AppDbContext db)
         CancellationToken cancellationToken
     )
     {
-        var game = await db.FindAsync<Game>(request.GameId);
+        var response = await db
+            .Games.AsNoTracking()
+            .Where(x => x.Id == request.GameId)
+            .ProjectToResponse()
+            .FirstOrDefaultAsync(cancellationToken);
 
-        if (game is null)
+        if (response is null)
         {
             await SendResultAsync(TypedResults.NotFound());
             return;
         }
 
-        var output = game.Adapt<GameResponse>();
-
-        await SendResultAsync(TypedResults.Ok(output));
+        await SendResultAsync(TypedResults.Ok(response));
     }
 }

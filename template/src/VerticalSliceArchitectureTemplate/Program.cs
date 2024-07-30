@@ -1,9 +1,6 @@
 using FastEndpoints.Swagger;
-using Mapster;
 
 [assembly: VogenDefaults(customizations: Customizations.AddFactoryMethodForGuids)]
-
-TypeAdapterConfig.GlobalSettings.Scan(typeof(Program).Assembly); // Wire up Mapster to scan the assembly for IRegister implementations
 
 var builder = WebApplication.CreateBuilder(args);
 
