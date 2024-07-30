@@ -7,10 +7,10 @@ public readonly partial record struct GameId;
 
 public class Game
 {
-    public GameId Id { get; init; } = GameId.From(Guid.NewGuid());
+    public GameId Id { get; init; } = GameId.FromNewGuid();
 
     public const int MaxNameLength = 50;
-    public string Name { get; set; }
+    public string Name { get; init; }
     public GameState State { get; private set; } = GameState.XTurn;
 
     public Board Board { get; private set; } = null!;

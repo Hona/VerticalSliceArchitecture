@@ -2,5 +2,5 @@
 
 public class Board
 {
-    public required Tile[][] Value { get; set; }
+    public required Tile[][] Value { get; init; }
 }
