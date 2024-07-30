@@ -33,7 +33,7 @@ internal sealed class PlayTurnCommand(AppDbContext db)
         game.MakeMove(request.Row, request.Column, request.Player);
         await db.SaveChangesAsync(cancellationToken);
 
-        var output = GameResponse.MapFrom(game);
+        var output = game.ToResponse();
         await SendResultAsync(TypedResults.Ok(output));
     }
 }

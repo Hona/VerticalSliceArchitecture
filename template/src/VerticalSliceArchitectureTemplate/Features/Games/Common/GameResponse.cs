@@ -1,13 +1,18 @@
 ﻿namespace VerticalSliceArchitectureTemplate.Features.Games.Common;
 
-[Mapper]
-public partial class GameResponse
+public record GameResponse
 {
     public required string Name { get; set; }
     public char[][]? Board { get; set; }
+}
 
+[Mapper]
+public static partial class GameResponseMapper
+{
     [MapProperty(nameof(Game.Board), nameof(Board), Use = nameof(MapBoard))]
-    public static partial GameResponse MapFrom(Game source);
+    public static partial GameResponse ToResponse(this Game source);
+
+    public static partial IQueryable<GameResponse> ProjectToResponse(this IQueryable<Game> q);
 
     [UserMapping(Default = false)]
     private static char[][]? MapBoard(Board? board) =>
