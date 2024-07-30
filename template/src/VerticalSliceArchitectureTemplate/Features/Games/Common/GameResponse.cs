@@ -1,21 +1,22 @@
-﻿using Mapster;
+﻿namespace VerticalSliceArchitectureTemplate.Features.Games.Common;
 
-namespace VerticalSliceArchitectureTemplate.Features.Games.Common;
-
-[AdaptFrom(typeof(Game))]
-public class GameResponse : IRegister
+public record GameResponse
 {
+    public required string Name { get; set; }
     public char[][]? Board { get; set; }
+}
 
-    public void Register(TypeAdapterConfig config)
-    {
-        config
-            .NewConfig<Game, GameResponse>()
-            .Map(
-                dest => dest.Board,
-                src => src.Board.Value.Select(row => row.Select(GetTileChar).ToArray()).ToArray()
-            );
-    }
+[Mapper]
+public static partial class GameResponseMapper
+{
+    [MapProperty(nameof(Game.Board), nameof(Board), Use = nameof(MapBoard))]
+    public static partial GameResponse ToResponse(this Game source);
+
+    public static partial IQueryable<GameResponse> ProjectToResponse(this IQueryable<Game> q);
+
+    [UserMapping(Default = false)]
+    private static char[][]? MapBoard(Board? board) =>
+        board?.Value.Select(row => row.Select(GetTileChar).ToArray()).ToArray();
 
     private static char GetTileChar(Tile tile) =>
         tile switch

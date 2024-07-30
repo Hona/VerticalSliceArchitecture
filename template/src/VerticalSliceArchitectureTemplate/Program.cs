@@ -1,7 +1,4 @@
 using FastEndpoints.Swagger;
-using Mapster;
-
-TypeAdapterConfig.GlobalSettings.Scan(typeof(Program).Assembly); // Wire up Mapster to scan the assembly for IRegister implementations
 
 var builder = WebApplication.CreateBuilder(args);
 
