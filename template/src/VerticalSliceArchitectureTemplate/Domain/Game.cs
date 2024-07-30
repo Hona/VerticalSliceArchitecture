@@ -2,17 +2,10 @@
 
 namespace VerticalSliceArchitectureTemplate.Domain;
 
-public record struct BoardPosition(int Row, int Column)
-{
-    public bool IsWithin(int boardSize) =>
-        Row >= 0 && Row < boardSize && Column >= 0 && Column < boardSize;
-}
-
-[ValueObject<Guid>]
-public readonly partial record struct GameId;
-
 public class Game
 {
+    private readonly BoardSize _defaultBoardSize = BoardSize.DefaultBoardSize;
+
     public GameId Id { get; init; } = GameId.FromNewGuid();
 
     public const int MaxNameLength = 50;
@@ -20,8 +13,6 @@ public class Game
     public GameState State { get; private set; } = GameState.XTurn;
 
     public Board Board { get; private set; } = null!;
-
-    private const int BoardSize = 3;
 
     // EF Core
     private Game() { }
@@ -48,7 +39,7 @@ public class Game
             throw new InvalidOperationException("Invalid tile");
         }
 
-        if (!boardPosition.IsWithin(BoardSize))
+        if (!boardPosition.IsWithin(_defaultBoardSize))
         {
             throw new InvalidOperationException("Invalid position");
         }
@@ -85,7 +76,7 @@ public class Game
         var tiles = Board.Value;
         Tile firstTile = tiles[0][0];
 
-        for (var i = 0; i < BoardSize; i++)
+        for (var i = 0; i < _defaultBoardSize.Value; i++)
         {
             Tile firstInColumn = tiles[i][0];
             if (
@@ -99,32 +90,20 @@ public class Game
             }
 
             Tile firstInRow = tiles[0][i];
-            if (
-                firstInRow != Tile.Empty
-                && firstInRow == tiles[1][i]
-                && firstInRow == tiles[2][i]
-            )
+            if (firstInRow != Tile.Empty && firstInRow == tiles[1][i] && firstInRow == tiles[2][i])
             {
                 winner = firstInRow;
                 return true;
             }
         }
 
-        if (
-            firstTile != Tile.Empty
-            && firstTile == tiles[1][1]
-            && firstTile == tiles[2][2]
-        )
+        if (firstTile != Tile.Empty && firstTile == tiles[1][1] && firstTile == tiles[2][2])
         {
             winner = firstTile;
             return true;
         }
 
-        if (
-            tiles[0][2] != Tile.Empty
-            && tiles[0][2] == tiles[1][1]
-            && tiles[0][2] == tiles[2][0]
-        )
+        if (tiles[0][2] != Tile.Empty && tiles[0][2] == tiles[1][1] && tiles[0][2] == tiles[2][0])
         {
             winner = tiles[0][2];
             return true;
@@ -135,16 +114,8 @@ public class Game
 
     private void Reset()
     {
-        Board = new Board { Value = new Tile[BoardSize][] };
+        Board = Board.NewBoard(_defaultBoardSize);
 
-        for (var i = 0; i < BoardSize; i++)
-        {
-            Board.Value[i] = new Tile[BoardSize];
-            for (var j = 0; j < BoardSize; j++)
-            {
-                Board.Value[i][j] = Tile.Empty;
-            }
-        }
         State = GameState.XTurn;
     }
 }
