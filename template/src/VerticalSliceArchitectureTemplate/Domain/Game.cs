@@ -2,6 +2,12 @@
 
 namespace VerticalSliceArchitectureTemplate.Domain;
 
+public record struct BoardPosition(int Row, int Column)
+{
+    public bool IsWithin(int boardSize) =>
+        Row >= 0 && Row < boardSize && Column >= 0 && Column < boardSize;
+}
+
 [ValueObject<Guid>]
 public readonly partial record struct GameId;
 
@@ -30,7 +36,7 @@ public class Game
         Reset();
     }
 
-    public void MakeMove(int row, int column, Tile tile)
+    public void MakeMove(BoardPosition boardPosition, Tile tile)
     {
         if (State is GameState.XWon or GameState.OWon)
         {
@@ -41,11 +47,12 @@ public class Game
         {
             throw new InvalidOperationException("Invalid tile");
         }
-        if (row < 0 || row >= BoardSize || column < 0 || column >= BoardSize)
+
+        if (!boardPosition.IsWithin(BoardSize))
         {
             throw new InvalidOperationException("Invalid position");
         }
-        if (Board.Value[row][column] != Tile.Empty)
+        if (Board.GetTileAt(boardPosition) != Tile.Empty)
         {
             throw new InvalidOperationException("Position is already taken");
         }
@@ -57,7 +64,7 @@ public class Game
             _ => throw new InvalidOperationException("Game is already over")
         };
 
-        Board.Value[row][column] = tile;
+        Board.SetTileAt(boardPosition, tile);
 
         if (IsGameOver(out var winner))
         {
