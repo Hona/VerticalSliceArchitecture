@@ -82,7 +82,7 @@ public class GameTests
         var act = () => game.MakeMove(new BoardPosition(0, 1), Tile.X);
         
         // Assert
-        act.Should().Throw<InvalidOperationException>().WithMessage("Game is already over");
+        act.Should().Throw<InvalidMoveException>().WithMessage("Game is already over");
     }
     
     
@@ -102,6 +102,6 @@ public class GameTests
         Action act = () => game.MakeMove(new BoardPosition(2, 1), Tile.O);
         
         // Assert
-        act.Should().Throw<InvalidOperationException>().WithMessage("Game is already over");
+        act.Should().Throw<InvalidMoveException>().WithMessage("Game is already over");
     }
 }
