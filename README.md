@@ -14,7 +14,7 @@ Spend less time over-engineering, and more time coding. The template has a focus
 Want to see what a vertical slice looks like? [Jump to the code snippet!](#full-code-snippet)
 
 <p align="center">
-    <img src="docs/divider-primary.png" />
+    <img src="https://github.com/Hona/VerticalSliceArchitecture/blob/main/docs/divider-primary.png?raw=true" />
 </p>
 
 > [!IMPORTANT]
@@ -27,13 +27,13 @@ Want to see what a vertical slice looks like? [Jump to the code snippet!](#full-
 > If you would like updates, feel free to 'Watch' the repo, that way you'll see the release in your GitHub home feed.
 
 <p align="center">
-    <img src="docs/divider-primary.png" />
+    <img src="https://github.com/Hona/VerticalSliceArchitecture/blob/main/docs/divider-primary.png?raw=true" />
 </p>
 
 <h3 align="center"><strong>Getting started ⚡</strong></h3>
 
 <p align="center">
-    <img src="docs/divider-primary.png" />
+    <img src="https://github.com/Hona/VerticalSliceArchitecture/blob/main/docs/divider-primary.png?raw=true" />
 </p>
 
 #### dotnet CLI
@@ -73,7 +73,7 @@ then create:
 <h3 align="center"><strong>Features ✨</strong></h3>
 
 <p align="center">
-    <img src="docs/divider-primary.png" />
+    <img src="https://github.com/Hona/VerticalSliceArchitecture/blob/main/docs/divider-primary.png?raw=true" />
 </p>
 
 ### A compelling example with the TikTacToe game! 🎮
@@ -85,7 +85,7 @@ game.MakeMove(0, 1, Tile.Y);
 ```
 
 <p align="center">
-    <img src="docs/divider-secondary.png" />
+    <img src="https://github.com/Hona/VerticalSliceArchitecture/blob/main/docs/divider-secondary.png?raw=true" />
 </p>
 
 ### Rich Domain (thank you DDD!)
@@ -106,7 +106,7 @@ public class Game
 ```
 
 <p align="center">
-    <img src="docs/divider-secondary.png" />
+    <img src="https://github.com/Hona/VerticalSliceArchitecture/blob/main/docs/divider-secondary.png?raw=true" />
 </p>
 
 ### Quick to write feature slices
@@ -152,7 +152,7 @@ internal sealed class MyQuery(AppDbContext db)
 ```
 
 <p align="center">
-    <img src="docs/divider-secondary.png" />
+    <img src="https://github.com/Hona/VerticalSliceArchitecture/blob/main/docs/divider-secondary.png?raw=true" />
 </p>
 
 ### EF Core
@@ -187,7 +187,7 @@ public class MyEntityConfiguration : IEntityTypeConfiguration<MyEntity>
 ```
 
 <p align="center">
-    <img src="docs/divider-secondary.png" />
+    <img src="https://github.com/Hona/VerticalSliceArchitecture/blob/main/docs/divider-secondary.png?raw=true" />
 </p>
 
 ### Architecture Tests via NuGet package
@@ -210,7 +210,7 @@ public class VerticalSliceArchitectureTests
 ```
 
 <p align="center">
-    <img src="docs/divider-secondary.png" />
+    <img src="https://github.com/Hona/VerticalSliceArchitecture/blob/main/docs/divider-secondary.png?raw=true" />
 </p>
 
 ### Cross Cutting Concerns
@@ -222,7 +222,7 @@ public class VerticalSliceArchitectureTests
 ## Automated Testing
 
 <p align="center">
-    <img src="docs/divider-tertiary.png" />
+    <img src="https://github.com/Hona/VerticalSliceArchitecture/blob/main/docs/divider-tertiary.png?raw=true" />
 </p>
 
 ### Domain - Unit Tested
@@ -246,7 +246,7 @@ public void Game_MakeMove_BindsTile()
 ```
 
 <p align="center">
-    <img src="docs/divider-secondary.png" />
+    <img src="https://github.com/Hona/VerticalSliceArchitecture/blob/main/docs/divider-secondary.png?raw=true" />
 </p>
 
 ### Application - Integration Tested
@@ -260,7 +260,7 @@ TODO
 ```
 
 <p align="center">
-    <img src="docs/divider-secondary.png" />
+    <img src="https://github.com/Hona/VerticalSliceArchitecture/blob/main/docs/divider-secondary.png?raw=true" />
 </p>
 
 ### Code - Architecture Tested
@@ -318,7 +318,7 @@ internal sealed class PlayTurnCommand(AppDbContext db)
 If you read it this far, why not give it a star? ;) 
 
 <p align="center">
-    <img src="docs/divider-tertiary.png" />
+    <img src="https://github.com/Hona/VerticalSliceArchitecture/blob/main/docs/divider-tertiary.png?raw=true" />
 </p>
 
 
