@@ -3,7 +3,7 @@
   <metadata>
 
     <id>Hona.VerticalSliceArchitecture.Template</id>
-    <version>2.0.0-rc4</version>
+    <version>2.0.0-rc5</version>
     <title>Vertical Slice Architecture Template</title>
     <authors>Luke Parker (Hona)</authors>
     <description>Spend less time over-engineering, and more time coding. The template has a focus on convenience, and developer confidence.</description>
