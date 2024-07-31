@@ -56,7 +56,9 @@ public class Game
         {
             GameState.XTurn when tile == Tile.X => GameState.OTurn,
             GameState.OTurn when tile == Tile.O => GameState.XTurn,
-            GameState.OWon or GameState.XWon => throw new InvalidMoveException("Game is already over"),
+            GameState.OWon
+            or GameState.XWon
+                => throw new InvalidMoveException("Game is already over"),
             _ => throw new UnreachableException("Invalid game state")
         };
 
