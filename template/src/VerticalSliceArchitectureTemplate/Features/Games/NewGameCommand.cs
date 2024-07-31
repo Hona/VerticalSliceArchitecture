@@ -24,7 +24,7 @@ internal sealed class NewGameCommand(AppDbContext db)
         CancellationToken cancellationToken
     )
     {
-        var game = new Game(GameId.From(Guid.NewGuid()), request.Name);
+        var game = new Game(GameId.FromNewGuid(), request.Name);
         db.Add(game);
         await db.SaveChangesAsync(cancellationToken);
 

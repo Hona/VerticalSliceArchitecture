@@ -1,5 +1,7 @@
 using FastEndpoints.Swagger;
 
+[assembly: VogenDefaults(customizations: Customizations.AddFactoryMethodForGuids)]
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddFastEndpoints(options =>

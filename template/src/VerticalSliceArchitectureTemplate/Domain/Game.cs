@@ -1,21 +1,19 @@
-﻿using Ardalis.GuardClauses;
+﻿using System.Diagnostics;
+using Ardalis.GuardClauses;
 
 namespace VerticalSliceArchitectureTemplate.Domain;
 
-[ValueObject<Guid>]
-public readonly partial record struct GameId;
-
 public class Game
 {
-    public GameId Id { get; init; } = GameId.From(Guid.NewGuid());
+    private readonly BoardSize _defaultBoardSize = BoardSize.DefaultBoardSize;
+
+    public GameId Id { get; init; } = GameId.FromNewGuid();
 
     public const int MaxNameLength = 50;
-    public string Name { get; set; }
+    public string Name { get; init; }
     public GameState State { get; private set; } = GameState.XTurn;
 
     public Board Board { get; private set; } = null!;
-
-    private const int BoardSize = 3;
 
     // EF Core constructor
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
@@ -32,34 +30,36 @@ public class Game
         Reset();
     }
 
-    public void MakeMove(int row, int column, Tile tile)
+    public void MakeMove(BoardPosition position, Tile tile)
     {
         if (State is GameState.XWon or GameState.OWon)
         {
-            throw new InvalidOperationException("Game is already over");
+            throw new InvalidMoveException("Game is already over");
         }
 
         if (tile != Tile.X && tile != Tile.O)
         {
-            throw new InvalidOperationException("Invalid tile");
+            throw new InvalidMoveException("Invalid tile");
         }
-        if (row < 0 || row >= BoardSize || column < 0 || column >= BoardSize)
+
+        if (!position.IsWithin(_defaultBoardSize))
         {
-            throw new InvalidOperationException("Invalid position");
+            throw new InvalidMoveException($"Invalid {nameof(position)}");
         }
-        if (Board.Value[row][column] != Tile.Empty)
+
+        if (Board.GetTileAt(position) != Tile.Empty)
         {
-            throw new InvalidOperationException("Position is already taken");
+            throw new InvalidMoveException("Position is already taken");
         }
 
         State = State switch
         {
             GameState.XTurn when tile == Tile.X => GameState.OTurn,
             GameState.OTurn when tile == Tile.O => GameState.XTurn,
-            _ => throw new InvalidOperationException("Game is already over")
+            _ => throw new InvalidMoveException("Game is already over")
         };
 
-        Board.Value[row][column] = tile;
+        Board.SetTileAt(position, tile);
 
         if (IsGameOver(out var winner))
         {
@@ -67,73 +67,77 @@ public class Game
             {
                 Tile.X => GameState.XTurn,
                 Tile.O => GameState.OWon,
-                _ => throw new InvalidOperationException(nameof(winner))
+                _ => throw new UnreachableException("Game was won with empty tiles!")
             };
         }
     }
 
     private bool IsGameOver(out Tile? winner)
     {
-        // TODO: Check this GH Copilot logic
         winner = null;
 
-        for (var i = 0; i < BoardSize; i++)
+        var tiles = Board.Value;
+
+        var firstTile = tiles[0][0];
+
+        winner = CheckRowsAndColumns() ?? CheckDiagonals();
+
+        return winner is not null || IsStalemate();
+
+        Tile? CheckRowsAndColumns()
         {
+            for (var i = 0; i < _defaultBoardSize.Value; i++)
+            {
+                var firstInColumn = tiles[i][0];
+                if (
+                    firstInColumn != Tile.Empty
+                    && firstInColumn == tiles[i][1]
+                    && firstInColumn == tiles[i][2]
+                )
+                {
+                    return firstInColumn;
+                }
+
+                var firstInRow = tiles[0][i];
+                if (
+                    firstInRow != Tile.Empty
+                    && firstInRow == tiles[1][i]
+                    && firstInRow == tiles[2][i]
+                )
+                {
+                    return firstInRow;
+                }
+            }
+
+            return null;
+        }
+
+        Tile? CheckDiagonals()
+        {
+            if (firstTile != Tile.Empty && firstTile == tiles[1][1] && firstTile == tiles[2][2])
+            {
+                return firstTile;
+            }
+
             if (
-                Board.Value[i][0] != Tile.Empty
-                && Board.Value[i][0] == Board.Value[i][1]
-                && Board.Value[i][0] == Board.Value[i][2]
+                tiles[0][2] != Tile.Empty
+                && tiles[0][2] == tiles[1][1]
+                && tiles[0][2] == tiles[2][0]
             )
             {
-                winner = Board.Value[i][0];
-                return true;
+                return tiles[0][2];
             }
-            if (
-                Board.Value[0][i] != Tile.Empty
-                && Board.Value[0][i] == Board.Value[1][i]
-                && Board.Value[0][i] == Board.Value[2][i]
-            )
-            {
-                winner = Board.Value[0][i];
-                return true;
-            }
+
+            return null;
         }
 
-        if (
-            Board.Value[0][0] != Tile.Empty
-            && Board.Value[0][0] == Board.Value[1][1]
-            && Board.Value[0][0] == Board.Value[2][2]
-        )
-        {
-            winner = Board.Value[0][0];
-            return true;
-        }
-
-        if (
-            Board.Value[0][2] != Tile.Empty
-            && Board.Value[0][2] == Board.Value[1][1]
-            && Board.Value[0][2] == Board.Value[2][0]
-        )
-        {
-            winner = Board.Value[0][2];
-            return true;
-        }
-
-        return Board.Value.SelectMany(row => row).All(tile => tile != Tile.Empty);
+        bool IsStalemate() => tiles.SelectMany(row => row).All(tile => tile != Tile.Empty);
     }
 
     private void Reset()
     {
-        Board = new Board { Value = new Tile[BoardSize][] };
+        Board = Board.NewBoard(_defaultBoardSize);
 
-        for (var i = 0; i < BoardSize; i++)
-        {
-            Board.Value[i] = new Tile[BoardSize];
-            for (var j = 0; j < BoardSize; j++)
-            {
-                Board.Value[i][j] = Tile.Empty;
-            }
-        }
         State = GameState.XTurn;
     }
 }

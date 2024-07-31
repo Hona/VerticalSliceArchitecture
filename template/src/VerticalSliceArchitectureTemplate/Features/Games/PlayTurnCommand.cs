@@ -2,7 +2,7 @@
 
 namespace VerticalSliceArchitectureTemplate.Features.Games;
 
-internal sealed record PlayTurnRequest(GameId GameId, int Row, int Column, Tile Player);
+internal sealed record PlayTurnRequest(GameId GameId, BoardPosition BoardPosition, Tile Player);
 
 internal sealed class PlayTurnCommand(AppDbContext db)
     : Endpoint<PlayTurnRequest, Results<Ok<GameResponse>, NotFound>>
@@ -30,7 +30,7 @@ internal sealed class PlayTurnCommand(AppDbContext db)
             return;
         }
 
-        game.MakeMove(request.Row, request.Column, request.Player);
+        game.MakeMove(request.BoardPosition, request.Player);
         await db.SaveChangesAsync(cancellationToken);
 
         var output = game.ToResponse();

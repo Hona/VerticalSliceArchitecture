@@ -9,7 +9,7 @@ public class GameTests
     public void Game_Constructor_CreatesGame()
     {
         // Act
-        var game = new Game(GameId.From(Guid.NewGuid()), "Some Game");
+        var game = new Game(GameId.FromNewGuid(), "Some Game");
         
         // Assert
         game.Should().NotBeNull();
@@ -22,7 +22,7 @@ public class GameTests
         const string name = "Test Game Name";
         
         // Act
-        var game = new Game(GameId.From(Guid.NewGuid()), name);
+        var game = new Game(GameId.FromNewGuid(), name);
         
         // Assert
         game.Name.Should().Be(name);
@@ -32,7 +32,7 @@ public class GameTests
     public void Game_Constructor_GeneratesBoard()
     {
         // Act
-        var game = new Game(GameId.From(Guid.NewGuid()), "Some Game");
+        var game = new Game(GameId.FromNewGuid(), "Some Game");
         
         // Assert
         game.Board.Should().NotBeNull();
@@ -47,11 +47,11 @@ public class GameTests
     public void Game_MakeMove_BindsTile()
     {
         // Arrange
-        var game = new Game(GameId.From(Guid.NewGuid()), "Some Game");
+        var game = new Game(GameId.FromNewGuid(), "Some Game");
         var tile = Tile.X;
         
         // Act
-        game.MakeMove(0, 0, tile);
+        game.MakeMove(new BoardPosition(0, 0), tile);
         
         // Assert
         game.Board.Value[0][0].Should().Be(tile);
@@ -61,11 +61,11 @@ public class GameTests
     public void Game_MakeMove_SwitchesState()
     {
         // Arrange
-        var game = new Game(GameId.From(Guid.NewGuid()), "Some Game");
+        var game = new Game(GameId.FromNewGuid(), "Some Game");
         var tile = Tile.X;
         
         // Act
-        game.MakeMove(0, 0, tile);
+        game.MakeMove(new BoardPosition(0, 0), tile);
         
         // Assert
         game.State.Should().Be(GameState.OTurn);
@@ -75,14 +75,14 @@ public class GameTests
     public void Game_MakeMove_ThrowsException_WhenTurnOutOfOrder()
     {
         // Arrange
-        var game = new Game(GameId.From(Guid.NewGuid()), "Some Game");
-        game.MakeMove(0, 0, Tile.X);
+        var game = new Game(GameId.FromNewGuid(), "Some Game");
+        game.MakeMove(new BoardPosition(0, 0), Tile.X);
         
         // Act
-        var act = () => game.MakeMove(0, 1, Tile.X);
+        var act = () => game.MakeMove(new BoardPosition(0, 1), Tile.X);
         
         // Assert
-        act.Should().Throw<InvalidOperationException>().WithMessage("Game is already over");
+        act.Should().Throw<InvalidMoveException>().WithMessage("Game is already over");
     }
     
     
@@ -91,17 +91,17 @@ public class GameTests
     public void Game_MakeMove_ThrowsException_WhenGameIsOver()
     {
         // Arrange
-        var game = new Game(GameId.From(Guid.NewGuid()), "Some Game");
-        game.MakeMove(0, 0, Tile.X);
-        game.MakeMove(0, 1, Tile.O);
-        game.MakeMove(1, 0, Tile.X);
-        game.MakeMove(1, 1, Tile.O);
-        game.MakeMove(2, 0, Tile.X);
+        var game = new Game(GameId.FromNewGuid(), "Some Game");
+        game.MakeMove(new BoardPosition(0, 0), Tile.X);
+        game.MakeMove(new BoardPosition(0, 1), Tile.O);
+        game.MakeMove(new BoardPosition(1, 0), Tile.X);
+        game.MakeMove(new BoardPosition(1, 1), Tile.O);
+        game.MakeMove(new BoardPosition(2, 0), Tile.X);
         
         // Act
-        Action act = () => game.MakeMove(2, 1, Tile.O);
+        var act = () => game.MakeMove(new BoardPosition(2, 1), Tile.O);
         
         // Assert
-        act.Should().Throw<InvalidOperationException>().WithMessage("Game is already over");
+        act.Should().Throw<InvalidMoveException>().WithMessage("Game is already over");
     }
 }
