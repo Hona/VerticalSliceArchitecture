@@ -34,7 +34,7 @@
         </PackageReference>
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4" />
         <PackageReference Include="Riok.Mapperly" Version="3.6.0" />
-        <PackageReference Include="Vogen" Version="4.0.15" />
+        <PackageReference Include="Vogen" Version="4.0.16" />
     </ItemGroup>
 
     <ItemGroup>
