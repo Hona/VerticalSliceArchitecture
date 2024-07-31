@@ -30,7 +30,7 @@ public class Game
         Reset();
     }
 
-    public void MakeMove(BoardPosition boardPosition, Tile tile)
+    public void MakeMove(BoardPosition position, Tile tile)
     {
         if (State is GameState.XWon or GameState.OWon)
         {
@@ -42,12 +42,12 @@ public class Game
             throw new InvalidMoveException("Invalid tile");
         }
 
-        if (!boardPosition.IsWithin(_defaultBoardSize))
+        if (!position.IsWithin(_defaultBoardSize))
         {
-            throw new InvalidMoveException("Invalid position");
+            throw new InvalidMoveException($"Invalid {nameof(position)}");
         }
 
-        if (Board.GetTileAt(boardPosition) != Tile.Empty)
+        if (Board.GetTileAt(position) != Tile.Empty)
         {
             throw new InvalidMoveException("Position is already taken");
         }
@@ -56,10 +56,11 @@ public class Game
         {
             GameState.XTurn when tile == Tile.X => GameState.OTurn,
             GameState.OTurn when tile == Tile.O => GameState.XTurn,
-            _ => throw new InvalidMoveException("Game is already over")
+            GameState.OWon or GameState.XWon => throw new InvalidMoveException("Game is already over"),
+            _ => throw new UnreachableException("Invalid game state")
         };
 
-        Board.SetTileAt(boardPosition, tile);
+        Board.SetTileAt(position, tile);
 
         if (IsGameOver(out var winner))
         {
@@ -74,12 +75,11 @@ public class Game
 
     private bool IsGameOver(out Tile? winner)
     {
-        // TODO: Check this GH Copilot logic
         winner = null;
 
         var tiles = Board.Value;
 
-        Tile firstTile = tiles[0][0];
+        var firstTile = tiles[0][0];
 
         winner = CheckRowsAndColumns() ?? CheckDiagonals();
 
@@ -89,7 +89,7 @@ public class Game
         {
             for (var i = 0; i < _defaultBoardSize.Value; i++)
             {
-                Tile firstInColumn = tiles[i][0];
+                var firstInColumn = tiles[i][0];
                 if (
                     firstInColumn != Tile.Empty
                     && firstInColumn == tiles[i][1]
@@ -99,7 +99,7 @@ public class Game
                     return firstInColumn;
                 }
 
-                Tile firstInRow = tiles[0][i];
+                var firstInRow = tiles[0][i];
                 if (
                     firstInRow != Tile.Empty
                     && firstInRow == tiles[1][i]

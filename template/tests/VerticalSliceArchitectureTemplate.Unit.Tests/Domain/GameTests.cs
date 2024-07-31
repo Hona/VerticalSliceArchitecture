@@ -99,7 +99,7 @@ public class GameTests
         game.MakeMove(new BoardPosition(2, 0), Tile.X);
         
         // Act
-        Action act = () => game.MakeMove(new BoardPosition(2, 1), Tile.O);
+        var act = () => game.MakeMove(new BoardPosition(2, 1), Tile.O);
         
         // Assert
         act.Should().Throw<InvalidMoveException>().WithMessage("Game is already over");
