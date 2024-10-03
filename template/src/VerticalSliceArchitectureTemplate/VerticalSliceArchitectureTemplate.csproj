@@ -9,10 +9,6 @@
 
     <ItemGroup>
         <PackageReference Include="Ardalis.GuardClauses" Version="4.6.0" />
-        <PackageReference Include="CSharpier.MsBuild" Version="0.28.2">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
         <PackageReference Include="FastEndpoints" Version="5.27.0" />
         <PackageReference Include="FastEndpoints.Generator" Version="5.28.0">
           <PrivateAssets>all</PrivateAssets>

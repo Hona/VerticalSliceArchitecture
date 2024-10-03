@@ -65,8 +65,9 @@ public class Game
         {
             State = winner switch
             {
-                Tile.X => GameState.XTurn,
+                Tile.X => GameState.XWon,
                 Tile.O => GameState.OWon,
+                null => GameState.Stalemate,
                 _ => throw new UnreachableException("Game was won with empty tiles!")
             };
         }
@@ -78,8 +79,6 @@ public class Game
 
         var tiles = Board.Value;
 
-        var firstTile = tiles[0][0];
-
         winner = CheckRowsAndColumns() ?? CheckDiagonals();
 
         return winner is not null || IsStalemate();
@@ -88,24 +87,24 @@ public class Game
         {
             for (var i = 0; i < _defaultBoardSize.Value; i++)
             {
-                var firstInColumn = tiles[i][0];
+                // Check columns
                 if (
-                    firstInColumn != Tile.Empty
-                    && firstInColumn == tiles[i][1]
-                    && firstInColumn == tiles[i][2]
+                    tiles[0][i] != Tile.Empty
+                    && tiles[0][i] == tiles[1][i]
+                    && tiles[0][i] == tiles[2][i]
                 )
                 {
-                    return firstInColumn;
+                    return tiles[0][i];
                 }
 
-                var firstInRow = tiles[0][i];
+                // Check rows
                 if (
-                    firstInRow != Tile.Empty
-                    && firstInRow == tiles[1][i]
-                    && firstInRow == tiles[2][i]
+                    tiles[i][0] != Tile.Empty
+                    && tiles[i][0] == tiles[i][1]
+                    && tiles[i][0] == tiles[i][2]
                 )
                 {
-                    return firstInRow;
+                    return tiles[i][0];
                 }
             }
 
@@ -114,11 +113,17 @@ public class Game
 
         Tile? CheckDiagonals()
         {
-            if (firstTile != Tile.Empty && firstTile == tiles[1][1] && firstTile == tiles[2][2])
+            // Check main diagonal
+            if (
+                tiles[0][0] != Tile.Empty
+                && tiles[0][0] == tiles[1][1]
+                && tiles[0][0] == tiles[2][2]
+            )
             {
-                return firstTile;
+                return tiles[0][0];
             }
 
+            // Check other diagonal
             if (
                 tiles[0][2] != Tile.Empty
                 && tiles[0][2] == tiles[1][1]

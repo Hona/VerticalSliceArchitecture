@@ -1,4 +1,5 @@
 using FastEndpoints.Swagger;
+using Microsoft.EntityFrameworkCore;
 
 [assembly: VogenDefaults(customizations: Customizations.AddFactoryMethodForGuids)]
 
@@ -23,9 +24,11 @@ app.UseSwaggerGen();
 using (var dbScope = app.Services.CreateScope())
 {
     var db = dbScope.ServiceProvider.GetRequiredService<AppDbContext>();
-    db.Database.EnsureDeleted();
-    db.Database.EnsureCreated();
+    await db.Database.EnsureCreatedAsync();
+    await db.Database.MigrateAsync();
 }
 #endif
 
 app.Run();
+
+public partial class Program;

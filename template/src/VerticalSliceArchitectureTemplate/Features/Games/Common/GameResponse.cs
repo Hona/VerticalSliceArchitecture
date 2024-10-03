@@ -4,6 +4,8 @@ public record GameResponse
 {
     public required string Name { get; set; }
     public char[][]? Board { get; set; }
+
+    public GameState State { get; set; }
 }
 
 [Mapper]

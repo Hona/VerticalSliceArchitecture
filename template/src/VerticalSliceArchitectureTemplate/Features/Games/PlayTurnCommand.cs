@@ -2,7 +2,7 @@
 
 namespace VerticalSliceArchitectureTemplate.Features.Games;
 
-internal sealed record PlayTurnRequest(GameId GameId, BoardPosition BoardPosition, Tile Player);
+public sealed record PlayTurnRequest(GameId GameId, BoardPosition BoardPosition, Tile Player);
 
 internal sealed class PlayTurnCommand(AppDbContext db)
     : Endpoint<PlayTurnRequest, Results<Ok<GameResponse>, NotFound>>
@@ -22,7 +22,7 @@ internal sealed class PlayTurnCommand(AppDbContext db)
         CancellationToken cancellationToken
     )
     {
-        var game = await db.FindAsync<Game>(request.GameId);
+        var game = await db.FindAsync<Game>(request.GameId, cancellationToken);
 
         if (game is null)
         {

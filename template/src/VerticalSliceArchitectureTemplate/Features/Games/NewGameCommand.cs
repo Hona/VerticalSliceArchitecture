@@ -1,6 +1,6 @@
 ﻿namespace VerticalSliceArchitectureTemplate.Features.Games;
 
-internal sealed record NewGameRequest(string Name);
+public sealed record NewGameRequest(string Name);
 
 internal sealed class NewGameRequestValidator : AbstractValidator<NewGameRequest>
 {
@@ -28,6 +28,6 @@ internal sealed class NewGameCommand(AppDbContext db)
         db.Add(game);
         await db.SaveChangesAsync(cancellationToken);
 
-        await SendResultAsync(TypedResults.Created("/games/{gameId}", game.Id));
+        await SendResultAsync(TypedResults.Created($"/games/{game.Id}"));
     }
 }

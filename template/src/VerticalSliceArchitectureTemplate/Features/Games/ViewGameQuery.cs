@@ -3,7 +3,7 @@ using VerticalSliceArchitectureTemplate.Features.Games.Common;
 
 namespace VerticalSliceArchitectureTemplate.Features.Games;
 
-internal sealed record ViewGameRequest(GameId GameId);
+public sealed record ViewGameRequest(GameId GameId);
 
 internal sealed class ViewGameQuery(AppDbContext db)
     : Endpoint<ViewGameRequest, Results<Ok<GameResponse>, NotFound>>
