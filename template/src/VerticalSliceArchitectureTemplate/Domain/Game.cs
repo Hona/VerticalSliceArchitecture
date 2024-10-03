@@ -56,7 +56,7 @@ public class Game
         {
             GameState.XTurn when tile == Tile.X => GameState.OTurn,
             GameState.OTurn when tile == Tile.O => GameState.XTurn,
-            _ => throw new InvalidMoveException("Game is already over")
+            _ => throw new InvalidMoveException("Game is already over"),
         };
 
         Board.SetTileAt(position, tile);
@@ -68,7 +68,7 @@ public class Game
                 Tile.X => GameState.XWon,
                 Tile.O => GameState.OWon,
                 null => GameState.Stalemate,
-                _ => throw new UnreachableException("Game was won with empty tiles!")
+                _ => throw new UnreachableException("Game was won with empty tiles!"),
             };
         }
     }

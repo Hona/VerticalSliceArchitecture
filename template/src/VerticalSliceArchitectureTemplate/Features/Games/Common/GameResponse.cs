@@ -26,6 +26,6 @@ public static partial class GameResponseMapper
             Tile.Empty => ' ',
             Tile.X => 'X',
             Tile.O => 'O',
-            _ => '?'
+            _ => '?',
         };
 }

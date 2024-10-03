@@ -96,7 +96,7 @@ public class NewGameCommandTests : IntegrationTestBase
                 {
                     Tile.X => GameState.XWon,
                     Tile.O => GameState.OWon,
-                    _ => throw new ArgumentOutOfRangeException(nameof(winner), winner, null)
+                    _ => throw new ArgumentOutOfRangeException(nameof(winner), winner, null),
                 }
             );
 
