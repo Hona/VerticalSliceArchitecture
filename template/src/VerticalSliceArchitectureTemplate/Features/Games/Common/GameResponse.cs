@@ -4,6 +4,8 @@ public record GameResponse
 {
     public required string Name { get; set; }
     public char[][]? Board { get; set; }
+
+    public GameState State { get; set; }
 }
 
 [Mapper]
@@ -24,6 +26,6 @@ public static partial class GameResponseMapper
             Tile.Empty => ' ',
             Tile.X => 'X',
             Tile.O => 'O',
-            _ => '?'
+            _ => '?',
         };
 }

@@ -6,4 +6,5 @@ public enum GameState
     OTurn,
     XWon,
     OWon,
+    Stalemate,
 }

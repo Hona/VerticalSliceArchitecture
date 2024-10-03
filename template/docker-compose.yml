@@ -1,0 +1,9 @@
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: vsa
+      POSTGRES_PASSWORD: vsapwd
+      POSTGRES_DB: verticalslicearchitecturetemplate
+    ports:
+      - "5432:5432"
