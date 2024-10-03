@@ -1,4 +1,8 @@
 using System.Diagnostics;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Testcontainers.PostgreSql;
 
@@ -14,13 +18,21 @@ public class IntegrationTestBase : IAsyncLifetime
 
     protected HttpClient Client = null!;
 
+    protected static readonly JsonSerializerOptions JsonSerializerOptions =
+        new(JsonSerializerDefaults.Web) { Converters = { new JsonStringEnumConverter() } };
+
     protected AsyncServiceScope NewScope() => _factory.Services.CreateAsyncScope();
 
     public async Task InitializeAsync()
     {
         await _postgreSqlContainer.StartAsync();
         _factory = new TestAppFactory(_postgreSqlContainer.GetConnectionString());
-        Client = _factory.CreateClient();
+        Client = _factory.CreateClient(new WebApplicationFactoryClientOptions());
+
+        await using var scope = NewScope();
+        var db = scope.GetDbContext();
+        await db.Database.EnsureCreatedAsync();
+        await db.Database.MigrateAsync();
     }
 
     public async Task DisposeAsync()

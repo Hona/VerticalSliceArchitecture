@@ -9,7 +9,11 @@ public class NewGameCommandTests : IntegrationTestBase
     public async Task CreateGame_ReturnsGame()
     {
         // Act
-        var response = await Client.PostAsJsonAsync("/games", new NewGameRequest("Some Game"));
+        var response = await Client.PostAsJsonAsync(
+            "/games",
+            new NewGameRequest("Some Game"),
+            JsonSerializerOptions
+        );
 
         // Assert
         response.EnsureSuccessStatusCode();
@@ -22,7 +26,8 @@ public class NewGameCommandTests : IntegrationTestBase
         // Arrange
         var newGameResponse = await Client.PostAsJsonAsync(
             "/games",
-            new NewGameRequest("Some Game")
+            new NewGameRequest("Some Game"),
+            JsonSerializerOptions
         );
         var gameIdRaw = newGameResponse.Headers.Location?.ToString().Split('/').Last();
 
@@ -40,7 +45,9 @@ public class NewGameCommandTests : IntegrationTestBase
         response.EnsureSuccessStatusCode();
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var gameResponse = await response.Content.ReadFromJsonAsync<GameResponse>();
+        var gameResponse = await response.Content.ReadFromJsonAsync<GameResponse>(
+            JsonSerializerOptions
+        );
 
         gameResponse.Should().NotBeNull();
         gameResponse!.Board.Should().NotBeNull();
@@ -80,14 +87,17 @@ public class NewGameCommandTests : IntegrationTestBase
         // Act
         var response = await Client.PostAsJsonAsync(
             $"/games/{game.Id}/play-turn",
-            new PlayTurnRequest(game.Id, new BoardPosition(2, 0), winner)
+            new PlayTurnRequest(game.Id, new BoardPosition(2, 0), winner),
+            JsonSerializerOptions
         );
 
         // Assert
         response.EnsureSuccessStatusCode();
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var gameResponse = await response.Content.ReadFromJsonAsync<GameResponse>();
+        var gameResponse = await response.Content.ReadFromJsonAsync<GameResponse>(
+            JsonSerializerOptions
+        );
         gameResponse.Should().NotBeNull();
         gameResponse!
             .State.Should()
