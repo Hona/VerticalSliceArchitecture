@@ -41,7 +41,7 @@ Want to see what a vertical slice looks like? [Jump to the code snippet!](#full-
 To install the template from NuGet.org run the following command:
 
 ```bash
-dotnet new install Hona.VerticalSliceArchitecture.Template
+dotnet new install Hona.VerticalSliceArchitecture.Template::2.0.0-rc6
 ```
 
 Then create a new solution:
