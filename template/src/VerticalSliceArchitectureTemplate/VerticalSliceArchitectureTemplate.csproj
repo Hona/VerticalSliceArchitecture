@@ -16,12 +16,12 @@
         </PackageReference>
         <PackageReference Include="FastEndpoints.Swagger" Version="5.30.0" />
         <PackageReference Include="FluentValidation" Version="11.10.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.10">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.8" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.10" />
         <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.ResourceUtilization" Version="8.9.1" />
         <PackageReference Include="Microsoft.Extensions.Http.Resilience" Version="8.9.1" />
         <PackageReference Include="Microsoft.Extensions.StaticAnalysis" Version="8.9.1">
